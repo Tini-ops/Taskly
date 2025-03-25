@@ -18,15 +18,16 @@ const TaskList = ({tasks, addTask, toggleTask, deleteTask}) => {
     }
 
     return (
+        
         <div>
-            //Input for adding tasks
+            {/* Input of task and button for adding the text of the task */}
             <div>
                 <input type="text" value={taskText} 
                 onChange={(e) => setTaskText(e.target.value)}
                 placeholder="Add a new task..." />
                 <button onClick={handleAddTask}>Add</button>
             </div>
-            //List of tasks
+            {/* List of tasks */}
             <ul>
                 {tasks.length === 0 ? (<p>No tasks yet. Add one!</p>) : 
                 (
