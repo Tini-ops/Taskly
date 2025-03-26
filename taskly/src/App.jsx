@@ -13,15 +13,24 @@ const App = () => {
   //runs everytime the array tasks changes, saving the updated list to local storage
   useEffect(() => { localStorage.setItem('tasks', JSON.stringify(tasks)); }, [tasks]);
 
+  //presenting priorites to a numerical value for sorting
+  const priorityOrder = {
+    "urgent-important": 1,
+    "not-urgent-important": 2,
+    "urgent-not-important": 3,
+    "not-urgent-not-important": 4,
+  }
+
   //Add a new task
-  const addTask = (text) => {
+  const addTask = (text, priority) => {
     const newTask = {
       id: Date.now(), 
       text: text,
+      priority: priority,
       completed: false,
     };
-    setTasks([...tasks, newTask]);
-  };
+    setTasks([...tasks, newTask].sort((a,b) => priorityOrder[a.priority] - priorityOrder[b.priority]));
+  }
 
   //Toggle task completion
   const toggleTask = (id) => {
@@ -37,7 +46,7 @@ const App = () => {
 
   return (
     <div className='app-container'>
-      <h1>Task Manager</h1>
+      <h1>Taskly</h1>
       <TaskList
       tasks={tasks}
       addTask={addTask}
