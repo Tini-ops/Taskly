@@ -18,6 +18,11 @@
     /* color: white; */
   }
 
+  .completed {
+    text-decoration: line-through;
+    color: #777070;
+  }
+
   /* Urgent and Important red */
   .urgent-important {
     background-color: #e74c3c;
