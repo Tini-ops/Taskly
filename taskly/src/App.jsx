@@ -44,6 +44,25 @@ const App = () => {
     setTasks(updatedTasks);
   };
 
+  const editTask = (id, newText) => {
+    setTasks(prevTasks => 
+      prevTasks.map(task =>
+        task.id === id ? {...task, text: newText} : task
+      )
+    );
+  };
+
+  const updatePriority = (id, newPriority) => {
+    setTasks(prevTasks => {
+      const updatedTasks = prevTasks.map(task =>
+        task.id === id ? {...task, priority: newPriority} : task
+      )
+
+      return updatedTasks.sort((a,b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+      
+  })
+  }
+
   return (
     <div className='app-container'>
       <h1>Taskly</h1>
@@ -52,6 +71,8 @@ const App = () => {
       addTask={addTask}
       toggleTask={toggleTask}
       deleteTask={deleteTask}
+      editTask={editTask}
+      updatePriority={updatePriority}
       />
     </div>
   );

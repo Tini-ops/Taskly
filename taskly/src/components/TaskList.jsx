@@ -6,7 +6,7 @@ tasks - list of tasks
 addTask - function for adding tasks 
 toggleTask and deleteTask will be passed on to TaskItem
  */
-const TaskList = ({tasks, addTask, toggleTask, deleteTask}) => {
+const TaskList = ({tasks, addTask, toggleTask, deleteTask, editTask, updatePriority}) => {
     const [taskText, setTaskText] = useState('');
     const [priority, setPriority] = useState('urgent-important'); //Default priority is red
 
@@ -46,10 +46,13 @@ const TaskList = ({tasks, addTask, toggleTask, deleteTask}) => {
                 (
                     tasks.map(task => (
                         <TaskItem
-                        key={taskText.id}
+                        key={task.id}
                         task={task}
                         toggleTask={toggleTask}
-                        deleteTask={deleteTask} />
+                        deleteTask={deleteTask}
+                        editTask={editTask} 
+                        updatePriority={updatePriority}
+                        />
                     ))
                 )}
             </ul>
