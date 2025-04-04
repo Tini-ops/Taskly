@@ -135,6 +135,16 @@ const App = () => {
     )
   }
 
+  const addProject = (name) => {
+    const newProject = {
+      id: Date.now(),
+      name,
+      tasks: [],
+      notes: ""
+    }
+    setProjects(prevProjects => [...prevProjects, newProject]);
+  }
+
   return (
     <div className='app-container'>
       <h1>Taskly</h1>
@@ -143,6 +153,7 @@ const App = () => {
       projects={projects}
       activeProject={activeProject}
       setActiveProject={handleProjectClick}
+      addProject={addProject}
       />
 
       <ProjectTabs
