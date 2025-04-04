@@ -145,6 +145,24 @@ const App = () => {
     setProjects(prevProjects => [...prevProjects, newProject]);
   }
 
+  const deleteProject = (id) => {
+    setProjects(prevProjects => {
+      const updatedProjects = prevProjects.filter(project => project.id !== id);
+      if (activeProject === id && updatedProjects.length > 0) {
+        setActiveProject(updatedProjects[0].id);
+      }
+      return updatedProjects;
+    })
+  }
+
+  const editProjectName = (id, newName) => {
+    setProjects(prevProjects => 
+      prevProjects.map(project =>
+        project.id === id ? {...project, name: newName} : project
+      )
+    )
+  }
+
   return (
     <div className='app-container'>
       <h1>Taskly</h1>
@@ -154,6 +172,8 @@ const App = () => {
       activeProject={activeProject}
       setActiveProject={handleProjectClick}
       addProject={addProject}
+      deleteProject={deleteProject}
+      editProjectName={editProjectName}
       />
 
       <ProjectTabs
