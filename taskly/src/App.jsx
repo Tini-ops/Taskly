@@ -5,12 +5,12 @@ import ProjectList from './components/ProjectList';
 import Notes from './components/Notes';
 
 const App = () => {
-  //State to store tasks
-  const [tasks, setTasks] = useState(() => {
-    //Load tasks from localStorage when the app starts
-    const savedTasks = localStorage.getItem('tasks');
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
+  // //State to store tasks
+  // const [tasks, setTasks] = useState(() => {
+  //   //Load tasks from localStorage when the app starts
+  //   const savedTasks = localStorage.getItem('tasks');
+  //   return savedTasks ? JSON.parse(savedTasks) : [];
+  // });
 
   //Projects
   //Holds multiple projects
@@ -23,15 +23,32 @@ const App = () => {
     ]
   });
 
-  //Keeping track of current project
-  const [activeProject, setActiveProject] = useState(1);
+  //Load active project from localStorage or default to 1
+  const [activeProject, setActiveProject] = useState(() => {
+    const savedActiveProject = localStorage.getItem('activeProject');
+    return savedActiveProject ? JSON.parse(savedActiveProject) : 1;
+  });
 
   //Get tasks for the selected project
   const activeTasks = projects.find(p => p.id === activeProject)?.tasks || [];
 
-  //Save tasks to localStorage whenever they change
-  //runs everytime the array tasks changes, saving the updated list to local storage
+  //Save projects and activeProject to localStorage whenever they change
   useEffect(() => { localStorage.setItem('projects', JSON.stringify(projects)); }, [projects]);
+
+  useEffect(() => { localStorage.setItem('activeProject', JSON.stringify(activeProject)); }, [activeProject]);
+
+  //Ensuring projects are loaded properly when  the app starts
+  useEffect(() => {
+    const savedProjects = localStorage.getItem('projects');
+    if (savedProjects) {
+      setProjects(JSON.parse(savedProjects));
+    }
+
+    const savedActiveProject = localStorage.getItem('activeProject');
+    if (savedActiveProject) {
+      setActiveProject(JSON.parse(savedActiveProject));
+    }
+  }, []);
 
   //Change active projects
   const handleProjectClick = (id) => {
@@ -55,7 +72,7 @@ const App = () => {
           : project
       )
     )
-  }
+  };
 
   //Toggle task completion
   const toggleTask = (id) => {
@@ -135,8 +152,8 @@ const App = () => {
       />
 
       <Notes
-      activeProject={activeProject}
       projects={projects}
+      activeProject={activeProject}
       updateNotes={updateNotes}
       />
 
