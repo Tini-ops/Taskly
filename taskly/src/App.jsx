@@ -5,13 +5,6 @@ import ProjectList from './components/ProjectList';
 import Notes from './components/Notes';
 
 const App = () => {
-  // //State to store tasks
-  // const [tasks, setTasks] = useState(() => {
-  //   //Load tasks from localStorage when the app starts
-  //   const savedTasks = localStorage.getItem('tasks');
-  //   return savedTasks ? JSON.parse(savedTasks) : [];
-  // });
-
   //Projects
   //Holds multiple projects
   const [projects, setProjects] = useState(() => {
@@ -63,27 +56,38 @@ const App = () => {
     "not-urgent-not-important": 4,
   }
 
+  const sortTasksByPriority = (tasks) => {
+    return [...tasks].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+  };
+
   //Add a new task
   const addTask = (text, priority) => {
     setProjects(prevProjects => 
-      prevProjects.map(project =>
-        project.id === activeProject 
-          ? {...project, tasks: [...project.tasks, {id: Date.now(), text, priority, completed: false}] }
-          : project
-      )
-    )
+      prevProjects.map(project => {
+        if (project.id !== activeProject) return project;
+  
+        const updatedTasks = [
+          ...project.tasks,
+          { id: Date.now(), text, priority, completed: false }
+        ];
+  
+        return {
+          ...project,
+          tasks: sortTasksByPriority(updatedTasks)
+        };
+      })
+    );
   };
 
   //Toggle task completion
   const toggleTask = (id) => {
-    // const updatedTasks = tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task);
     // setTasks(updatedTasks);
     setProjects(prevProjects =>
       prevProjects.map(project =>
         project.id === activeProject
-        ? {...project, tasks: project.tasks.map(task =>
+        ? {...project, tasks: sortTasksByPriority(project.tasks.map(task =>
           task.id === id ? {...task, completed: !task.completed} : task
-        )}
+        ))}
         : project
       )
     )
@@ -94,7 +98,7 @@ const App = () => {
     setProjects(prevProjects =>
       prevProjects.map(project =>
         project.id === activeProject
-          ? {...project, tasks: project.tasks.filter(task => task.id !== id)}
+          ? {...project, tasks: sortTasksByPriority(project.tasks.filter(task => task.id !== id))}
           : project
       )
     )
@@ -104,7 +108,7 @@ const App = () => {
     setProjects(prevProjects =>
       prevProjects.map(project =>
         project.id === activeProject
-        ? {...project, tasks: project.tasks.map(task => task.id === id ? {...task, text: newText} : task)}
+        ? {...project, tasks: sortTasksByPriority(project.tasks.map(task => task.id === id ? {...task, text: newText} : task))}
         : project
       )
     )
@@ -166,36 +170,43 @@ const App = () => {
   return (
     <div className='app-container'>
       <h1>Taskly</h1>
+      <div className='main-layout'>
+        <div className='sidebar'>
+        <ProjectTabs
+          projects={projects}
+          activeProject={activeProject}
+          setActiveProject={setActiveProject}
+          /> 
+          <ProjectList
+          projects={projects}
+          activeProject={activeProject}
+          setActiveProject={handleProjectClick}
+          addProject={addProject}
+          deleteProject={deleteProject}
+          editProjectName={editProjectName}
+          />
+          
+        </div>
+        <div className='task-area'>
+          <TaskList
+          tasks={activeTasks}
+          addTask={addTask}
+          toggleTask={toggleTask}
+          deleteTask={deleteTask}
+          editTask={editTask}
+          updatePriority={updatePriority}
+          />
+        </div>
+        <div className='notes-area'>
+          <Notes
+          projects={projects}
+          activeProject={activeProject}
+          updateNotes={updateNotes}
+          />
 
-      <ProjectList
-      projects={projects}
-      activeProject={activeProject}
-      setActiveProject={handleProjectClick}
-      addProject={addProject}
-      deleteProject={deleteProject}
-      editProjectName={editProjectName}
-      />
-
-      <ProjectTabs
-      projects={projects}
-      activeProject={activeProject}
-      setActiveProject={setActiveProject}
-      />
-
-      <Notes
-      projects={projects}
-      activeProject={activeProject}
-      updateNotes={updateNotes}
-      />
-
-      <TaskList
-      tasks={activeTasks}
-      addTask={addTask}
-      toggleTask={toggleTask}
-      deleteTask={deleteTask}
-      editTask={editTask}
-      updatePriority={updatePriority}
-      />
+        </div>
+      </div>
+       
     </div>
   );
 };

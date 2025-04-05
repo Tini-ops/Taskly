@@ -50,7 +50,7 @@ const ProjectList = ({projects, activeProject, setActiveProject, addProject, del
             <button onClick={handleAddProject}>Add Project</button>
            
         </div>
-    )
+    ) 
 }
 
 export default ProjectList;

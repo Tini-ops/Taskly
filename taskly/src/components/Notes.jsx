@@ -8,7 +8,7 @@ const Notes = ({projects, activeProject, updateNotes}) => {
             <h2>Notes for {project?.name}</h2>
             <textarea value={project?.notes || ""}
                 onChange={(e) => updateNotes(activeProject, e.target.value)}
-                placeholder="write notes for this project..."
+                placeholder="Write notes for this project..."
             />
         </div>
         

@@ -42,7 +42,7 @@ const TaskList = ({tasks, addTask, toggleTask, deleteTask, editTask, updatePrior
 
             {/* List of tasks */}
             <ul>
-                {tasks.length === 0 ? (<p>No tasks yet. Add one!</p>) : 
+                {tasks.length === 0 ? (<p id="no-task">No tasks yet. Add one!</p>) : 
                 (
                     tasks.map(task => (
                         <TaskItem
